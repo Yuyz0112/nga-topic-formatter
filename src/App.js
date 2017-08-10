@@ -32,7 +32,7 @@ class App extends Component {
       isLoading: true,
     });
     const url = process.env.NODE_ENV === 'production'
-      ? `https://${window.location.hostname}?tid=${tid}`
+      ? `${window.location.protocol}://${window.location.host}?tid=${tid}`
       : `http://${window.location.hostname}:${PORT}?tid=${tid}`;
     fetch(url)
       .then(res => res.text())

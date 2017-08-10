@@ -1,0 +1,29 @@
+{
+  "name": "nga-topic-formatter",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "1.0.11"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "iconv-lite": "^0.4.18",
+    "kcors": "2",
+    "koa": "^2.3.0",
+    "koa-static": "^4.0.1",
+    "pretty": "^2.0.0",
+    "query-string": "^5.0.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "scripts": {
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "start": "NODE_ENV=production node server"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}

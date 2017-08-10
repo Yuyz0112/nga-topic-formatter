@@ -1,0 +1,41 @@
+.App {
+  padding: 0 2rem;
+}
+input.invalid,
+input.invalid:focus {
+  border-color: #f38181;
+}
+.box {
+  border: 1px solid #33c3f0;
+  padding: 0 .5rem;
+  transition: .3s ease-in-out;
+  cursor: pointer;
+}
+.box:not(:last-child) {
+  border-bottom: none;
+}
+.box:hover {
+  background: #fefaec;
+}
+.box p {
+  margin: 0;
+}
+.box br {
+  display: none;
+}
+.box .index,
+.box .author {
+  color: #625772;
+  font-size: 1rem;
+}
+.result {
+  border: 1px solid #33c3f0;
+  padding: 0 .5rem;
+  margin-top: 2rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+.Checkbox label {
+  display: inline-block;
+  margin-right: .5rem;
+}

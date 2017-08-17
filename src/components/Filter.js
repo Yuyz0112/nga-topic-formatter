@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import pretty from 'pretty';
+import Polygon from './Polygon';
 
 const DOUBLE_BR = '<br/><br/>';
 const styleTags = [
@@ -23,6 +24,8 @@ const urlTagG = /\[url](.+?)\[\/url]/g;
 const multiBrTag = num => new RegExp(`((<br(|\\/)>)|\\n){${num},}`, 'g');
 const tdTag = /(|<br(|\/)>)\[td\s*?(|(\d|\.)*?)\s*?(|colspan=(\d*?))\s*?(|rowspan=(\d*?))](|<br(|\/)>)/;
 const tdTagG = /(|<br(|\/)>)\[td\s*?(|(\d|\.)*?)\s*?(|colspan=(\d*?))\s*?(|rowspan=(\d*?))](|<br(|\/)>)/g;
+const chartradarTag = /\[chartradar(|.*?)](.+?)\[\/chartradar]/;
+const chartradarTagG = /\[chartradar(|.*?)](.+?)\[\/chartradar]/g;
 
 function setImage(url) {
   if (/^http/.test(url)) {
@@ -60,7 +63,7 @@ function transformTable(content, options = {}) {
   let transformed = content;
   if (showTable) {
     transformed = content
-      .replace(/\[table](|<br(|\/)>)/g, '<table>')
+      .replace(/\[table.*?](|<br(|\/)>)/g, '<table>')
       .replace(/(|<br(|\/)>)\[\/table]/g, '</table>')
       .replace(/(|<br(|\/)>)\[tr](|<br(|\/)>)/g, '<tr>')
       .replace(/(|<br(|\/)>)\[\/tr](|<br(|\/)>)/g, '</tr>')
@@ -87,6 +90,19 @@ function transformTable(content, options = {}) {
       .replace(tdTagG, DOUBLE_BR);
   }
   return transformed;
+}
+
+function transformChart(content, self) {
+  const charts = content.match(chartradarTagG) || [];
+  self.charts = [];
+  return charts.reduce(
+    (prev, cur) => {
+      const chart = cur.match(chartradarTag)[0];
+      self.charts.push(chart);
+      return prev.replace(chart, `__Polygon__`);
+    },
+    content
+  );
 }
 
 function toArray(obj) {
@@ -147,6 +163,7 @@ class Filter extends PureComponent {
     transformed = transformImages(transformed);
     transformed = transformUrl(transformed);
     transformed = transformTable(transformed, { showTable });
+    transformed = transformChart(transformed, this);
     if (clearMultiBr) {
       transformed = transformed.replace(multiBrTag(3), DOUBLE_BR);
     }
@@ -214,12 +231,17 @@ class Filter extends PureComponent {
               {showCode ? '显示内容' : '显示源代码'}
             </button>
             {!showCode && (
-              <div
-                className="result"
-                dangerouslySetInnerHTML={{
-                  __html: htmlResult,
-                }}
-              />
+              <div className="result">
+                {htmlResult.split('__Polygon__').map((htmlSegment, index) => {
+                  console.log(index, this.charts)
+                  return (
+                    <span>
+                      <span dangerouslySetInnerHTML={{ __html: htmlSegment }}/>
+                      <Polygon code={this.charts[index]} />
+                    </span>
+                  );
+                })}
+              </div>
             )}
             {showCode && (
               <div className="result">
